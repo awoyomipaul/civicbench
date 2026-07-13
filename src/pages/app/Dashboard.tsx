@@ -12,11 +12,12 @@ export function AppDashboard() {
 
   useEffect(() => {
     api.tasks().then((data: any) => {
-      setStats({ tasks: data.tasks?.length || 0, wallet: 0, completed: data.tasks?.filter((t: any) => t.status === "completed")?.length || 0 })
-      setRecentTasks(data.tasks?.slice(0, 5) || [])
+      const list = Array.isArray(data) ? data : []
+      setStats((s) => ({ ...s, tasks: list.length, completed: list.filter((t: any) => t.status === "reviewed" || t.status === "paid").length }))
+      setRecentTasks(list.slice(0, 5))
     }).catch(() => {})
-    api.wallet().then((data: any) => {
-      setStats((s) => ({ ...s, wallet: data.balance || 0 }))
+    api.walletBalance().then((data: any) => {
+      setStats((s) => ({ ...s, wallet: data?.balance || 0 }))
     }).catch(() => {})
   }, [])
 
@@ -68,11 +69,11 @@ export function AppDashboard() {
             <Link key={task.id} to={`/app/tasks/${task.id}`} className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
               <div>
                 <p className="font-medium text-civic-slate">{task.title}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{task.category} &middot; {task.location}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{task.type}</p>
               </div>
               <div className="text-right">
-                <p className="font-semibold text-civic-green">N{task.reward?.toLocaleString()}</p>
-                <span className={`inline-block mt-1 px-2 py-0.5 text-xs rounded-full ${task.status === "open" ? "bg-green-100 text-green-700" : task.status === "in_review" ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"}`}>{task.status}</span>
+                <p className="font-semibold text-civic-green">N{task.pay_amount?.toLocaleString()}</p>
+                <span className={`inline-block mt-1 px-2 py-0.5 text-xs rounded-full ${task.status === "open" ? "bg-green-100 text-green-700" : task.status === "submitted" ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-600"}`}>{task.status}</span>
               </div>
             </Link>
           ))}

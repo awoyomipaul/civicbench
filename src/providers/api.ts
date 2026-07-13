@@ -14,6 +14,7 @@ async function fetchApi(path: string, options?: RequestInit) {
     const err = await res.json().catch(() => ({}))
     throw new Error(err.error || `HTTP ${res.status}`)
   }
+  if (res.status === 204) return null
   return res.json()
 }
 
@@ -23,15 +24,22 @@ export const api = {
   me: () => fetchApi("/me"),
   logout: () => { localStorage.removeItem("token") },
 
-  tasks: () => fetchApi("/tasks"),
+  tasks: (status?: string) => fetchApi(status ? `/tasks?status=${status}` : "/tasks"),
   task: (id: string) => fetchApi(`/tasks/${id}`),
-  createTask: (data: unknown) => fetchApi("/tasks", { method: "POST", body: JSON.stringify(data) }),
+  createTask: (data: { title: string; description: string; type: string; budget: number; payAmount: number }) =>
+    fetchApi("/tasks", { method: "POST", body: JSON.stringify(data) }),
   claimTask: (id: string) => fetchApi(`/tasks/${id}/claim`, { method: "POST" }),
 
   submissions: () => fetchApi("/submissions"),
-  submit: (data: unknown) => fetchApi("/submissions", { method: "POST", body: JSON.stringify(data) }),
-  review: (id: string, data: unknown) => fetchApi(`/submissions/${id}/review`, { method: "POST", body: JSON.stringify(data) }),
+  mySubmissions: () => fetchApi("/submissions/mine"),
+  submit: (data: { taskId: number; textContent: string; fileUrls?: string }) =>
+    fetchApi("/submissions", { method: "POST", body: JSON.stringify(data) }),
+  grade: (id: string, data: { grade: "A" | "B" | "C" | "D" | "F"; comment: string }) =>
+    fetchApi(`/submissions/${id}/grade`, { method: "POST", body: JSON.stringify(data) }),
 
-  wallet: () => fetchApi("/wallet"),
-  seed: () => fetchApi("/seed"),
+  walletBalance: () => fetchApi("/wallet/balance"),
+  walletHistory: () => fetchApi("/wallet/history"),
+  payWorker: (submissionId: string) => fetchApi(`/wallet/pay/${submissionId}`, { method: "POST" }),
+
+  seed: () => fetchApi("/seed", { method: "POST" }),
 }

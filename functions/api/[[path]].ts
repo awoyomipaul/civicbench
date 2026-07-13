@@ -3,9 +3,15 @@ export async function onRequest(context: any) {
   const url = new URL(context.request.url)
   const target = WORKER_URL + url.pathname + url.search
 
-  return fetch(target, {
+  const init: RequestInit & { duplex?: string } = {
     method: context.request.method,
     headers: context.request.headers,
-    body: context.request.body,
-  })
+  }
+
+  if (context.request.method !== "GET" && context.request.method !== "HEAD") {
+    init.body = context.request.body
+    init.duplex = "half"
+  }
+
+  return fetch(target, init)
 }

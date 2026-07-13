@@ -16,7 +16,7 @@ export function useAuth() {
     const token = localStorage.getItem("token")
     if (!token) { setLoading(false); return }
     api.me()
-      .then((data: { user: User }) => setUser(data.user))
+      .then((data: User | null) => setUser(data ?? null))
       .catch(() => localStorage.removeItem("token"))
       .finally(() => setLoading(false))
   }, [])

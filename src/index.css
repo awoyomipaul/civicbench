@@ -26,3 +26,9 @@
     --radius: 0.5rem;
   }
 }
+
+@media print {
+  aside, .md\:hidden { display: none !important; }
+  main { overflow: visible !important; padding: 0 !important; }
+  body { background: white !important; }
+}

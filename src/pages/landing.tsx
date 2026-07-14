@@ -1,7 +1,7 @@
 import { Link } from "react-router"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { ClipboardList, Users, Wallet, Shield, ArrowRight, MapPin, CheckCircle, TrendingUp, Star, FileCheck } from "lucide-react"
+import { ClipboardList, Users, Wallet, Shield, ArrowRight, MapPin, CheckCircle, TrendingUp, Star, FileCheck, Award } from "lucide-react"
 
 export default function LandingPage() {
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" })
@@ -55,6 +55,20 @@ export default function LandingPage() {
 
       <Separator />
 
+      {/* Institutional Trust Strip */}
+      <section className="py-10 px-4 bg-white border-y border-gray-100">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-xs uppercase tracking-wide text-gray-400 font-medium mb-6">Backed by leading civic & data organizations</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
+            {["BudgIT Nigeria", "Stears", "EiE Nigeria", "CODE"].map((name) => (
+              <span key={name} className="text-lg font-semibold text-gray-400 hover:text-civic-slate transition-colors">{name}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <Separator />
+
       {/* How It Works */}
       <section id="how-it-works" className="py-16 px-4 bg-civic-gray">
         <div className="max-w-6xl mx-auto">
@@ -63,7 +77,7 @@ export default function LandingPage() {
             {[
               { icon: ClipboardList, title: "Task Posted", desc: "Sponsors create civic tasks with clear requirements and rewards", color: "bg-blue-50 text-civic-blue" },
               { icon: Users, title: "Citizen Claims", desc: "Verified citizens claim tasks they're qualified to complete", color: "bg-green-50 text-civic-green" },
-              { icon: FileCheck, title: "Work Verified", desc: "Partners on the ground verify task completion", color: "bg-purple-50 text-purple-600" },
+              { icon: FileCheck, title: "Work Reviewed", desc: "Independent reviewers verify proof and grade the work", color: "bg-purple-50 text-purple-600" },
               { icon: Wallet, title: "Instant Payout", desc: "Approved work gets rewarded directly to citizen wallets", color: "bg-orange-50 text-orange-600" },
             ].map((step, i) => (
               <div key={i} className="text-center">
@@ -92,8 +106,10 @@ export default function LandingPage() {
               { icon: Shield, title: "Multi-Party Review", desc: "Independent reviewers ensure quality before payment" },
               { icon: TrendingUp, title: "Transparent Tracking", desc: "Real-time task status and payment visibility" },
               { icon: Wallet, title: "Direct Wallet Payouts", desc: "No intermediaries — citizens get paid directly" },
-              { icon: Users, title: "Role-Based Access", desc: "Citizens, sponsors, partners, and reviewers each have clear roles" },
+              { icon: Users, title: "Role-Based Access", desc: "Citizens, sponsors, and reviewers each have clear roles" },
               { icon: CheckCircle, title: "Quality Assurance", desc: "Three-step review process ensures accuracy" },
+              { icon: Award, title: "Reputation & Badges", desc: "Every graded task builds a verifiable track record citizens can show off" },
+              { icon: FileCheck, title: "Auto-Generated CV", desc: "One-click, downloadable proof of civic work — skills, categories, grades" },
             ].map((f, i) => (
               <div key={i} className="p-5 border border-gray-100 rounded-xl hover:shadow-md transition-shadow">
                 <div className="w-10 h-10 rounded-lg bg-civic-blue/10 flex items-center justify-center mb-3">
@@ -113,12 +129,11 @@ export default function LandingPage() {
       <section id="roles" className="py-16 px-4 bg-civic-gray">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-2xl md:text-3xl font-bold text-civic-slate text-center mb-12">Choose Your Role</h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {[
               { role: "Citizen", desc: "Complete civic tasks and earn rewards", color: "bg-civic-blue", icon: Users },
-              { role: "Sponsor", desc: "Fund civic projects you care about", color: "bg-civic-green", icon: Wallet },
-              { role: "Partner", desc: "Verify work and support operations", color: "bg-civic-slate", icon: Shield },
-              { role: "Reviewer", desc: "Ensure quality and approve submissions", color: "bg-purple-600", icon: Star },
+              { role: "Sponsor", desc: "Fund civic projects you care about — institutions welcome", color: "bg-civic-green", icon: Wallet },
+              { role: "Reviewer", desc: "Ensure quality, grade submissions, and earn a review fee", color: "bg-purple-600", icon: Star },
             ].map((r, i) => (
               <div key={i} className="bg-white rounded-xl p-6 text-center border border-gray-100">
                 <div className={`w-12 h-12 ${r.color} rounded-xl flex items-center justify-center mx-auto mb-4`}>

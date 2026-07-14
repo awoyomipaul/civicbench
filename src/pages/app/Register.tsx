@@ -9,7 +9,7 @@ export function AppRegister() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [role, setRole] = useState<"citizen" | "sponsor" | "partner" | "reviewer">("citizen")
+  const [role, setRole] = useState<"citizen" | "sponsor" | "reviewer">("citizen")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -28,10 +28,9 @@ export function AppRegister() {
     }
   }
 
-  const roles: Array<{ value: "citizen" | "sponsor" | "partner" | "reviewer"; label: string }> = [
+  const roles: Array<{ value: "citizen" | "sponsor" | "reviewer"; label: string }> = [
     { value: "citizen", label: "Citizen - Complete civic tasks" },
-    { value: "sponsor", label: "Sponsor - Fund civic projects" },
-    { value: "partner", label: "Partner - Verify & support" },
+    { value: "sponsor", label: "Sponsor - Fund civic projects (incl. institutional partners)" },
     { value: "reviewer", label: "Reviewer - Review submissions" },
   ]
 

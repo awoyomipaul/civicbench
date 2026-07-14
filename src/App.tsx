@@ -10,6 +10,7 @@ import { AppCreateTask } from "./pages/app/CreateTask"
 import { AppSubmissions } from "./pages/app/Submissions"
 import { AppReviews } from "./pages/app/Reviews"
 import { AppWallet } from "./pages/app/Wallet"
+import { AppProfile } from "./pages/app/Profile"
 
 export default function App() {
   return (
@@ -25,6 +26,8 @@ export default function App() {
         <Route path="submissions" element={<AppSubmissions />} />
         <Route path="reviews" element={<AppReviews />} />
         <Route path="wallet" element={<AppWallet />} />
+        <Route path="profile" element={<AppProfile />} />
+        <Route path="profile/:id" element={<AppProfile />} />
       </Route>
     </Routes>
   )

@@ -38,7 +38,7 @@ export function AppReviews() {
                   <p className="font-semibold text-civic-slate">{sub.taskTitle || `Task #${sub.taskId}`}</p>
                   <p className="text-sm text-gray-400">By {sub.citizenName || "Anonymous"}</p>
                 </div>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${sub.status === "approved" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{sub.status}</span>
+                <span className={`px-2 py-0.5 text-xs rounded-full capitalize ${sub.status === "approved" ? "bg-green-100 text-green-700" : sub.status === "disputed" ? "bg-orange-100 text-orange-700" : "bg-red-100 text-red-700"}`}>{sub.status}</span>
               </div>
               {sub.feedback && <p className="text-sm text-gray-600 mt-2"><span className="font-medium">Feedback:</span> {sub.feedback}</p>}
               <p className="text-xs text-gray-400 mt-2">Reviewed on {sub.reviewedAt ? new Date(sub.reviewedAt).toLocaleDateString() : "N/A"}</p>

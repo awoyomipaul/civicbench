@@ -2,7 +2,7 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router"
 import { useAuth } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { LayoutDashboard, ClipboardList, Wallet, Star, FileCheck, LogOut, Menu, X } from "lucide-react"
+import { LayoutDashboard, ClipboardList, Wallet, Star, FileCheck, LogOut, Menu, X, Award } from "lucide-react"
 import { useState } from "react"
 
 const navItems = [
@@ -11,6 +11,7 @@ const navItems = [
   { path: "/app/submissions", label: "Submissions", icon: FileCheck },
   { path: "/app/reviews", label: "Reviews", icon: Star },
   { path: "/app/wallet", label: "Wallet", icon: Wallet },
+  { path: "/app/profile", label: "Profile & CV", icon: Award },
 ]
 
 export function AppLayout() {

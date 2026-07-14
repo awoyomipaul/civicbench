@@ -5,7 +5,12 @@ export interface User {
   id: number
   name: string
   email: string
-  role: "citizen" | "sponsor" | "partner" | "reviewer"
+  role: "citizen" | "sponsor" | "reviewer"
+  verifiedPartner?: string | null
+  partnerTier?: string | null
+  reputationScore?: number
+  totalTasksCompleted?: number
+  averageGrade?: number | null
 }
 
 export function useAuth() {
@@ -27,5 +32,5 @@ export function useAuth() {
     window.location.href = "/app/login"
   }
 
-  return { user, loading, isAuthenticated: !!user, logout, isSponsor: user?.role === "sponsor", isPartner: user?.role === "partner", isReviewer: user?.role === "reviewer" }
+  return { user, loading, isAuthenticated: !!user, logout, isSponsor: user?.role === "sponsor", isPartner: !!user?.verifiedPartner, isReviewer: user?.role === "reviewer" }
 }

@@ -10,23 +10,23 @@ export function AppWallet() {
   const [transactions, setTransactions] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
-  const load = () => {
-    Promise.all([api.walletBalance(), api.walletHistory()]).then(([bal, hist]: any) => {
-      setBalance(bal?.balance || 0)
-      setTransactions(Array.isArray(hist) ? hist : [])
+  useEffect(() => {
+    api.wallet().then((data: any) => {
+      setBalance(data.balance || 0)
+      setTransactions(data.transactions || [])
       setLoading(false)
     }).catch(() => setLoading(false))
-  }
-
-  useEffect(load, [])
+  }, [])
 
   const handleSeed = async () => {
     try {
       await api.seed()
-      load()
-      alert("Demo data seeded!")
+      const data = await api.wallet() as any
+      setBalance(data.balance || 0)
+      setTransactions(data.transactions || [])
+      alert("Demo wallet funded with N10,000!")
     } catch (e: any) {
-      alert(e.message || "Failed to seed demo data")
+      alert(e.message || "Failed to seed wallet")
     }
   }
 
@@ -49,7 +49,7 @@ export function AppWallet() {
           {user?.role === "sponsor" && (
             <Button size="sm" variant="secondary" className="bg-white/20 text-white hover:bg-white/30 border-0">Fund Wallet</Button>
           )}
-          <Button size="sm" onClick={handleSeed} className="bg-civic-green hover:bg-civic-green-dark text-white border-0 ml-auto">Seed Demo Data</Button>
+          <Button size="sm" onClick={handleSeed} className="bg-civic-green hover:bg-civic-green-dark text-white border-0 ml-auto">+ Seed Demo Funds</Button>
         </div>
       </div>
 
@@ -62,21 +62,22 @@ export function AppWallet() {
             <div className="p-8 text-center">
               <AlertCircle className="w-8 h-8 text-gray-300 mx-auto mb-2" />
               <p className="text-gray-400 text-sm">No transactions yet.</p>
+              <Button size="sm" onClick={handleSeed} className="mt-3 bg-civic-green hover:bg-civic-green-dark">Seed Demo Funds</Button>
             </div>
           ) : (
             transactions.map((tx: any) => (
               <div key={tx.id} className="flex items-center justify-between p-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === "credit" ? "bg-green-100" : "bg-red-100"}`}>
-                    {tx.type === "credit" ? <ArrowDownLeft className="w-4 h-4 text-green-600" /> : <ArrowUpRight className="w-4 h-4 text-red-600" />}
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === "credit" || tx.type === "reward" ? "bg-green-100" : "bg-red-100"}`}>
+                    {tx.type === "credit" || tx.type === "reward" ? <ArrowDownLeft className="w-4 h-4 text-green-600" /> : <ArrowUpRight className="w-4 h-4 text-red-600" />}
                   </div>
                   <div>
                     <p className="text-sm font-medium text-civic-slate capitalize">{tx.description || tx.type}</p>
-                    <p className="text-xs text-gray-400">{tx.created_at ? new Date(tx.created_at).toLocaleDateString() : "N/A"}</p>
+                    <p className="text-xs text-gray-400">{tx.createdAt ? new Date(tx.createdAt).toLocaleDateString() : "N/A"}</p>
                   </div>
                 </div>
-                <span className={`font-semibold text-sm ${tx.type === "credit" ? "text-civic-green" : "text-red-600"}`}>
-                  {tx.type === "credit" ? "+" : "-"}N{Math.abs(tx.amount)?.toLocaleString()}
+                <span className={`font-semibold text-sm ${tx.type === "credit" || tx.type === "reward" ? "text-civic-green" : "text-red-600"}`}>
+                  {tx.type === "credit" || tx.type === "reward" ? "+" : "-"}N{tx.amount?.toLocaleString()}
                 </span>
               </div>
             ))

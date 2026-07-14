@@ -6,15 +6,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 
-const TASK_TYPES = ["Translation", "Verification", "Data Entry", "Field Work", "Survey", "Analysis"]
-
 export function AppCreateTask() {
   const navigate = useNavigate()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [type, setType] = useState(TASK_TYPES[0])
-  const [budget, setBudget] = useState("")
-  const [payAmount, setPayAmount] = useState("")
+  const [category, setCategory] = useState("Documentation")
+  const [location, setLocation] = useState("")
+  const [reward, setReward] = useState("")
+  const [deadline, setDeadline] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
@@ -26,9 +25,10 @@ export function AppCreateTask() {
       await api.createTask({
         title,
         description,
-        type,
-        budget: parseFloat(budget),
-        payAmount: parseFloat(payAmount),
+        category,
+        location,
+        reward: parseInt(reward),
+        deadline: deadline || null,
       })
       navigate("/app/tasks")
     } catch (err: any) {
@@ -36,6 +36,8 @@ export function AppCreateTask() {
       setLoading(false)
     }
   }
+
+  const categories = ["Documentation", "Verification", "Clean-up", "Survey", "Community Support", "Data Collection", "Other"]
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -54,21 +56,27 @@ export function AppCreateTask() {
           <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} required placeholder="Describe what needs to be done..." className="mt-1" />
         </div>
 
-        <div>
-          <Label htmlFor="type">Type</Label>
-          <select id="type" value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-civic-blue">
-            {TASK_TYPES.map((c) => <option key={c} value={c}>{c}</option>)}
-          </select>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="category">Category</Label>
+            <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-civic-blue">
+              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
+          <div>
+            <Label htmlFor="location">Location</Label>
+            <Input id="location" value={location} onChange={(e) => setLocation(e.target.value)} required placeholder="e.g., Lagos, Ikeja" className="mt-1" />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="budget">Total Budget (N)</Label>
-            <Input id="budget" type="number" min="100" value={budget} onChange={(e) => setBudget(e.target.value)} required placeholder="5000" className="mt-1" />
+            <Label htmlFor="reward">Reward (N)</Label>
+            <Input id="reward" type="number" min="100" value={reward} onChange={(e) => setReward(e.target.value)} required placeholder="5000" className="mt-1" />
           </div>
           <div>
-            <Label htmlFor="payAmount">Worker Pay (N)</Label>
-            <Input id="payAmount" type="number" min="100" value={payAmount} onChange={(e) => setPayAmount(e.target.value)} required placeholder="5000" className="mt-1" />
+            <Label htmlFor="deadline">Deadline</Label>
+            <Input id="deadline" type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="mt-1" />
           </div>
         </div>
 

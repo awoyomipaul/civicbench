@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react"
 import { api } from "@/providers/api"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { Star } from "lucide-react"
 
 export function AppReviews() {
@@ -8,8 +10,8 @@ export function AppReviews() {
 
   useEffect(() => {
     api.submissions().then((data: any) => {
-      const list = Array.isArray(data) ? data : []
-      setReviews(list.filter((s: any) => s.status !== "pending"))
+      const reviewed = (data.submissions || []).filter((s: any) => s.status !== "pending")
+      setReviews(reviewed)
       setLoading(false)
     }).catch(() => setLoading(false))
   }, [])
@@ -33,13 +35,13 @@ export function AppReviews() {
             <div key={sub.id} className="bg-white rounded-xl border border-gray-100 shadow-sm p-5">
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <p className="font-semibold text-civic-slate">{sub.task_title || `Task #${sub.task_id}`}</p>
-                  <p className="text-sm text-gray-400">By {sub.citizen_name || "Anonymous"}</p>
+                  <p className="font-semibold text-civic-slate">{sub.taskTitle || `Task #${sub.taskId}`}</p>
+                  <p className="text-sm text-gray-400">By {sub.citizenName || "Anonymous"}</p>
                 </div>
-                <span className={`px-2 py-0.5 text-xs rounded-full ${sub.status === "approved" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{sub.grade ? `Grade ${sub.grade}` : sub.status}</span>
+                <span className={`px-2 py-0.5 text-xs rounded-full ${sub.status === "approved" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>{sub.status}</span>
               </div>
-              {sub.reviewer_comment && <p className="text-sm text-gray-600 mt-2"><span className="font-medium">Feedback:</span> {sub.reviewer_comment}</p>}
-              <p className="text-xs text-gray-400 mt-2">Reviewed on {sub.reviewed_at ? new Date(sub.reviewed_at).toLocaleDateString() : "N/A"}</p>
+              {sub.feedback && <p className="text-sm text-gray-600 mt-2"><span className="font-medium">Feedback:</span> {sub.feedback}</p>}
+              <p className="text-xs text-gray-400 mt-2">Reviewed on {sub.reviewedAt ? new Date(sub.reviewedAt).toLocaleDateString() : "N/A"}</p>
             </div>
           ))}
         </div>
